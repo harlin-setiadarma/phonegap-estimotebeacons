@@ -45,6 +45,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import android.Manifest;
+import org.apache.cordova.PermissionHelper;
+
 /**
  * Plugin class for the Estimote Beacon plugin.
  */
@@ -62,7 +65,8 @@ public class EstimoteBeacons extends CordovaPlugin
 	private ArrayList<Beacon> mRangedBeacons;
 	private BeaconConnected   mConnectedBeacon;
 	private boolean           mIsConnected = false;
-
+	
+	String [] permissions = { Manifest.permission.ACCESS_COARSE_LOCATION };
 
 	// Maps and variables that keep track of Cordova callbacks.
 	private HashMap<String, CallbackContext> mRangingCallbackContexts =
@@ -212,6 +216,12 @@ public class EstimoteBeacons extends CordovaPlugin
 		else if ("bluetooth_bluetoothState".equals(action)) {
 			checkBluetoothState(args, callbackContext);
 		}
+		else if ("beacons_requestAlwaysAuthorization".equals(action)) {
+			requestLocationPermission(args, callbackContext);
+		}
+		else if ("beacons_requestWhenInUseAuthorization".equals(action)) {
+			requestLocationPermission(args, callbackContext);
+		}				
 		else if("initService".equals(action)) {
 			initService(args, callbackContext);
 		} else if("deviceReady".equals(action)) {
@@ -222,6 +232,34 @@ public class EstimoteBeacons extends CordovaPlugin
 		return true;
 	}
 
+	/**
+	 * Request runtime permission
+	 */
+	private void requestLocationPermission(CordovaArgs cordovaArgs, CallbackContext callbackContext)
+	{
+		Log.i(LOGTAG, "requestLocationPermission");
+        
+		if(hasPermisssion())
+		{
+			//PluginResult r = new PluginResult(PluginResult.Status.OK);
+			//context.sendPluginResult(r);
+		}
+		else {
+			PermissionHelper.requestPermissions(this, 0, permissions);
+		}
+	}	
+	
+    public boolean hasPermisssion() {
+        for(String p : permissions)
+        {
+            if(!PermissionHelper.hasPermission(this, p))
+            {
+                return false;
+            }
+        }
+        return true;
+    }	
+	
 	private CallbackContext mInitServiceCallbackContext = null;
 
 	private boolean initService(CordovaArgs cordovaArgs, final CallbackContext callbackContext) {
@@ -297,7 +335,7 @@ public class EstimoteBeacons extends CordovaPlugin
 			sendResultForBluetoothEnabled(callbackContext);
 		}
 	}
-
+	
 	/**
 	 * Check if Bluetooth is enabled and return result to JavaScript.
 	 */
