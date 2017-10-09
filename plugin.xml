@@ -18,6 +18,7 @@
         <engine name="cordova-plugman" version=">=4.2.0"/> 
     </engines>
 
+    <dependency id="cordova-plugin-compat" version="^1.0.0" />
 
 	<platform name="android">
 		<config-file target="res/xml/config.xml" parent="/*">

@@ -25,5 +25,12 @@
   "bugs": {
     "url": "https://github.com/evothings/phonegap-estimotebeacons/issues"
   },
-  "homepage": "https://github.com/evothings/phonegap-estimotebeacons#readme"
+  "homepage": "https://github.com/evothings/phonegap-estimotebeacons#readme",
+  "engines": {
+    "cordovaDependencies": {
+      "3.0.0": {
+        "cordova": ">100"
+      }
+    }
+  }  
 }
